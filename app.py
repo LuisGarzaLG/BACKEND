@@ -8,16 +8,31 @@ app = Flask(__name__)
 CORS(app)
 
 # Ruta raíz que acepta GET y POST
-@app.route('/', methods=['GET', 'POST'])
+@app.route('/', methods=['GET'])
 def home():
-    if request.method == 'POST':
-        data = request.json
-        return jsonify({
-            "mensaje": "Datos recibidos en POST /",
-            "contenido": data
-        }), 200
-    else:
-        return "Servidor Flask activo. Envía POST con JSON a esta misma URL (/)", 200
+    # Parámetros de simulación por defecto
+    default_data = {
+        "num_personas": 100,
+        "tiempo_simulacion": 1000,
+        "tiempo_llegadas": 2,
+        "duracion_bn": [1, 3],
+        "duracion_color": [4, 10],
+        "impresoras_bn": 2,
+        "impresoras_color": 2
+    }
+
+    # Guardar en archivo temporal y ejecutar simulador.py
+    with tempfile.NamedTemporaryFile(mode='w+', delete=False, suffix='.json') as temp_input:
+        json.dump(default_data, temp_input)
+        temp_input_path = temp_input.name
+
+    try:
+        resultado = subprocess.check_output(['python', 'simulador.py', temp_input_path], text=True)
+        registros = json.loads(resultado)
+        return jsonify(registros)  # Puedes retornar HTML si prefieres
+    except subprocess.CalledProcessError as e:
+        return jsonify({"error": "Fallo al ejecutar la simulación", "detalles": e.output}), 500
+
 
 @app.route('/api/simular', methods=['POST', 'OPTIONS'])
 @cross_origin()
