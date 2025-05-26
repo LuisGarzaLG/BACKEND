@@ -1,0 +1,51 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Simulación de Impresoras</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      padding: 20px;
+    }
+
+    button {
+      padding: 10px 20px;
+      font-size: 16px;
+      background-color: #0078D7;
+      color: white;
+      border: none;
+      cursor: pointer;
+      border-radius: 4px;
+    }
+
+    pre {
+      background-color: #f4f4f4;
+      padding: 15px;
+      border: 1px solid #ccc;
+      margin-top: 20px;
+      overflow: auto;
+      max-height: 500px;
+    }
+  </style>
+</head>
+<body>
+  <h1>Simulador de Impresión</h1>
+  <button onclick="ejecutarSimulacion()">Ejecutar Simulación</button>
+  <pre id="resultado"></pre>
+
+  <script>
+    function ejecutarSimulacion() {
+      fetch('http://127.0.0.1:5000/')  // Asegúrate de que el puerto sea el correcto
+        .then(response => response.json())
+        .then(data => {
+          document.getElementById('resultado').textContent = JSON.stringify(data, null, 2);
+        })
+        .catch(error => {
+          document.getElementById('resultado').textContent = "Error al ejecutar la simulación:\n" + error;
+        });
+    }
+  </script>
+</body>
+</html>
