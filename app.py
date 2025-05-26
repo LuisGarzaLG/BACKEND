@@ -123,7 +123,7 @@ def home():
     except Exception as e:
         return jsonify({"error": "Fallo en la simulación", "detalles": str(e)}), 500
 
-@app.route('/api/simular', methods=['POST', 'OPTIONS'])
+@app.route('/simular', methods=['POST', 'OPTIONS'])
 @cross_origin()
 def simular():
     data = request.json
