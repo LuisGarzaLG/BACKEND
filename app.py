@@ -4,6 +4,7 @@ import simpy
 import random
 import json
 import sys
+import os
 import tempfile
 
 # ==================== FLASK CONFIG ====================
@@ -142,4 +143,5 @@ if __name__ == '__main__':
         print(json.dumps(resultado))
     else:
         # Ejecutar como servidor Flask
-        app.run(debug=True)
+        port = int(os.environ.get("PORT", 5000))
+        app.run(host="0.0.0.0", port=port, debug=False)
